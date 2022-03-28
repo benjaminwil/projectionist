@@ -1,0 +1,4 @@
+# Tests that Go can run the main program, and that it exits with a zero status.
+$$$ go run src/main.go
+ok
+>>>=0
