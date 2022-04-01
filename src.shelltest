@@ -1,0 +1,9 @@
+#!/usr/bin/env shelltest
+#
+# These tests are run using `shelltestrunner`.
+# https://github.com/simonmichael/shelltestrunner
+
+# Tests that Go can run the main program, and that it exits with a 1 status.
+$ go build src/main.go && ./main
+> /open .\/.projections.json: no such file or directory/
+>=1
