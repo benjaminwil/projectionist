@@ -10,6 +10,18 @@ If you're interested in using Projectionist *right now*, this is not the program
 for you. I recommend checking out [`vim-projectionist`][1] if you're a Vim user,
 or [`projectionist`][2] if you're not a Vim user.
 
+## System requirements
+
+Once this software has any working functionality I will provide a binary.
+
+To build this software from source:
+
+- Go 1.18+
+
+To develop and run tests against the source code you'll also need:
+
+- [`shelltestrunner` 1.9+](https://github.com/simonmichael/shelltestrunner)
+
 ## Roadmap
 
 I have made no progress so far. I have one priority feature I'd like to
