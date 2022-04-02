@@ -23,7 +23,7 @@ test-go:
 
 test-shelltest:
 	@printf "\n--- Run end-to-end commandline tests. ---\n"
-	shelltest -ac src.shelltest
+	shelltest -ac test/main.shelltest
 
 test: test-build test-shelltest test-go
 
