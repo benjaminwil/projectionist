@@ -1,14 +1,20 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
 )
 
 func main() {
-	projections, err := ReadProjections(ioutil.ReadFile)
+	path := flag.String("path",
+		fmt.Sprintf("%s/.projections.json", pwd()),
+		"pass an explicit path to the preferred projections JSON")
 
+	flag.Parse()
+
+	projections, err := ReadProjections(ioutil.ReadFile, path)
 	if err == nil {
 		fmt.Println(projections)
 		os.Exit(0)
@@ -18,8 +24,19 @@ func main() {
 	}
 }
 
-func ReadProjections(readfile func(string) ([]byte, error)) (string, error) {
-	if contents, err := readfile("./.projections.json"); err == nil {
+func pwd() string {
+	if path, err := os.Getwd(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+		return path
+	} else {
+		return path
+	}
+}
+
+func ReadProjections(readfile func(string) ([]byte, error),
+	path *string) (string, error) {
+	if contents, err := readfile(*path); err == nil {
 		return string(contents), nil
 	} else {
 		return "no file", err

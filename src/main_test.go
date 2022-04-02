@@ -1,28 +1,20 @@
 package main
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"testing"
 )
 
-type DummyReadFile struct {
-	Str string
-}
-
-func (f DummyReadFile) ReadFile(filename string) ([]byte, error) {
-	buffer := bytes.NewBufferString(f.Str)
-	return ioutil.ReadAll(buffer)
-}
-
 func TestReadProjection_NoFilePresent(t *testing.T) {
 	expectedError := fmt.Errorf("no such file")
-	noFileToRead := func(filename string) ([]byte, error) {
+	path := pointer("./.projections.json")
+
+	f := func(filename string) ([]byte, error) {
 		return make([]byte, 0, 48), expectedError
 	}
-	result, err := ReadProjections(noFileToRead)
+
+	result, err := ReadProjections(f, path)
 
 	if result != "no file" {
 		t.Errorf("Function should return 'no file' but returned %s", result)
@@ -34,10 +26,22 @@ func TestReadProjection_NoFilePresent(t *testing.T) {
 }
 
 func TestReadProjections_FilePresent(t *testing.T) {
-	dummy_ioutil := DummyReadFile{Str: "{}"}
-	result, _ := ReadProjections(dummy_ioutil.ReadFile)
+	json := "{}"
+	path := pointer("./.projections.json")
+
+	f := func(filename string) ([]byte, error) {
+		return []byte(json), nil
+	}
+
+	result, _ := ReadProjections(f, path)
 
 	if result != "{}" {
 		t.Errorf("function should return '{}' but returned %s", result)
 	}
+}
+
+func pointer(s string) *string {
+	var p *string
+	p = &s
+	return p
 }

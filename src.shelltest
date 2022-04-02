@@ -3,7 +3,12 @@
 # These tests are run using `shelltestrunner`.
 # https://github.com/simonmichael/shelltestrunner
 
-# Tests that Go can run the main program, and that it exits with a 1 status.
-$ go build src/main.go && ./main
-> /open .\/.projections.json: no such file or directory/
+# The main program is built and cannot find a .projections.json file.
+$ test/build/projectionist
+> /no such file or directory$/
 >=1
+
+# A .projections.json file is found and printed.
+$ test/build/projectionist -path=test/projections.test.json
+> /{}/
+>=0
