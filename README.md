@@ -1,9 +1,13 @@
 # Projectionist in Go
 
-A commandline utility that interprets `.projections.json` files. These files
-are used by [`vim-projectionist`][1], but as the author says: there's nothing
-Vim-specific about the configuration. Once completed, this tool will allow you
-to more easily integrate projections into your non-Vim text editor.
+A commandline utility that interprets `.projections.json` files.
+
+[![Projectionist Test Suite][gh-workflow-badge]][gh-workflow-history]
+
+These files are used by [`vim-projectionist`][1], but as the author says:
+there's nothing Vim-specific about the configuration. Once completed, this tool
+will allow you to more easily integrate projections into your non-Vim text
+editor.
 
 I've chosen to write this utility in Go because I've never written Go before.
 If you're interested in using Projectionist *right now*, this is not the program
@@ -12,6 +16,9 @@ or [`projectionist`][2] if you're not a Vim user.
 
 [1]: https://github.com/tpope/vim-projectionist
 [2]: https://github.com/glittershark/projectionist
+
+[gh-workflow-badge]: https://github.com/benjaminwil/projectionist/actions/workflows/ci.yml/badge.svg
+[gh-workflow-history]: https://github.com/benjaminwil/projectionist/actions/workflows/ci.yml
 
 ## Dependencies
 

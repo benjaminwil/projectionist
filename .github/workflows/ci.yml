@@ -1,0 +1,19 @@
+name: Projectionist Test Suite
+on: [push]
+jobs:
+  ci:
+    name: Run test suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "^1.18"
+      - name: Install shelltestrunner
+        run: sudo apt-get install shelltestrunner
+      - name: Compile Projectionist
+        run: make test-build
+      - name: Run shelltest test suite
+        run: make test-shelltest
+      - name: Run go test command
+        run: make test-go
