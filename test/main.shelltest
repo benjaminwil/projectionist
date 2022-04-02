@@ -2,6 +2,17 @@
 #
 # These tests are run using `shelltestrunner`.
 # https://github.com/simonmichael/shelltestrunner
+#
+# You will have a much nicer time if you run these tests via Make:
+#
+#     $ make test
+# or:
+#     $ make test-shelltest
+#
+# If you need to run these tests directly, then do so the same way that the
+# Makefile does: from the root directory of the project:
+#
+#     $ shelltest test/main.shelltest
 
 # The main program is built and cannot find a .projections.json file.
 $ test/build/projectionist
