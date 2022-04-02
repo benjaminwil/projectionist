@@ -10,17 +10,38 @@ If you're interested in using Projectionist *right now*, this is not the program
 for you. I recommend checking out [`vim-projectionist`][1] if you're a Vim user,
 or [`projectionist`][2] if you're not a Vim user.
 
-## System requirements
+[1]: https://github.com/tpope/vim-projectionist
+[2]: https://github.com/glittershark/projectionist
+
+## Dependencies
 
 Once this software has any working functionality I will provide a binary.
 
-To build this software from source:
+### Building
+
+To build this software from source, you'll need:
 
 - Go 1.18+
+- Make\*
+
+\* Recommended, but not required.
+
+I recommend using Make to build from source:
+
+    $ make build
+
+Once run, the binary will be built to `build/projectionist`.
+
+### Development and testing
 
 To develop and run tests against the source code you'll also need:
 
 - [`shelltestrunner` 1.9+](https://github.com/simonmichael/shelltestrunner)
+
+If you have all of the dependencies installed, you can use the Make to run
+tests:
+
+    $ make test
 
 ## Roadmap
 
@@ -30,6 +51,3 @@ implement so I can start using this tool day-to-day:
 - **Support alternates.**
   For example: If I'm in `app/models/book.rb`, my editor should be able to
   auto-navigate to `test/models/book_test.rb`.
-
-[1]: https://github.com/tpope/vim-projectionist
-[2]: https://github.com/glittershark/projectionist
