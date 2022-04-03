@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -37,13 +38,27 @@ func read(file *string) string {
 		os.Exit(1)
 	}
 
-	return projections
+	form := make(map[string]string)
+
+	for key, value := range projections {
+		form[key] = value.(string)
+	}
+
+	return fmt.Sprintf("%v", form)
 }
 
-func Read(f func(string) ([]byte, error), file *string) (string, error) {
+func Read(f func(string) ([]byte, error), file *string) (map[string]interface{}, error) {
 	if contents, err := f(*file); err == nil {
-		return string(contents), nil
+
+		var data map[string]interface{}
+		e := json.Unmarshal(contents, &data)
+
+		if e == nil {
+			return data, nil
+		} else {
+			return nil, e
+		}
 	} else {
-		return "no file", err
+		return nil, err
 	}
 }

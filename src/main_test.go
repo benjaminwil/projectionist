@@ -16,7 +16,7 @@ func TestRead_NoFilePresent(t *testing.T) {
 
 	result, err := Read(f, file)
 
-	if result != "no file" {
+	if result != nil {
 		t.Errorf("Function should return 'no file' but returned %s", result)
 	}
 
@@ -26,17 +26,17 @@ func TestRead_NoFilePresent(t *testing.T) {
 }
 
 func TestRead_FilePresent(t *testing.T) {
-	json := "{}"
 	file := pointer("./.projections.json")
-
+	fileContents := "{}"
 	f := func(filename string) ([]byte, error) {
-		return []byte(json), nil
+		return []byte(fileContents), nil
 	}
 
 	result, _ := Read(f, file)
 
-	if result != "{}" {
-		t.Errorf("function should return '{}' but returned %s", result)
+	if result == nil {
+		t.Errorf("function should return JSON interface for '%s' but didn't",
+			fileContents)
 	}
 }
 
