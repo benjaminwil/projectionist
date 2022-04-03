@@ -6,15 +6,15 @@ import (
 	"testing"
 )
 
-func TestReadProjection_NoFilePresent(t *testing.T) {
+func TestRead_NoFilePresent(t *testing.T) {
 	expectedError := fmt.Errorf("no such file")
-	path := pointer("./.projections.json")
+	file := pointer("./.projections.json")
 
 	f := func(filename string) ([]byte, error) {
 		return make([]byte, 0, 48), expectedError
 	}
 
-	result, err := ReadProjections(f, path)
+	result, err := Read(f, file)
 
 	if result != "no file" {
 		t.Errorf("Function should return 'no file' but returned %s", result)
@@ -25,15 +25,15 @@ func TestReadProjection_NoFilePresent(t *testing.T) {
 	}
 }
 
-func TestReadProjections_FilePresent(t *testing.T) {
+func TestRead_FilePresent(t *testing.T) {
 	json := "{}"
-	path := pointer("./.projections.json")
+	file := pointer("./.projections.json")
 
 	f := func(filename string) ([]byte, error) {
 		return []byte(json), nil
 	}
 
-	result, _ := ReadProjections(f, path)
+	result, _ := Read(f, file)
 
 	if result != "{}" {
 		t.Errorf("function should return '{}' but returned %s", result)

@@ -20,6 +20,6 @@ $ test/build/projectionist
 >=1
 
 # A .projections.json file is found and printed.
-$ test/build/projectionist -path=test/projections.test.json
+$ test/build/projectionist --file=test/projections.test.json
 > /{}/
 >=0

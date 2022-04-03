@@ -8,13 +8,13 @@ import (
 )
 
 func main() {
-	path := flag.String("path",
+	file := flag.String("file",
 		fmt.Sprintf("%s/.projections.json", pwd()),
 		"pass an explicit path to the preferred projections JSON")
 
 	flag.Parse()
 
-	projections, err := ReadProjections(ioutil.ReadFile, path)
+	projections, err := Read(ioutil.ReadFile, file)
 	if err == nil {
 		fmt.Println(projections)
 		os.Exit(0)
@@ -34,9 +34,8 @@ func pwd() string {
 	return path
 }
 
-func ReadProjections(readfile func(string) ([]byte, error),
-	path *string) (string, error) {
-	if contents, err := readfile(*path); err == nil {
+func Read(f func(string) ([]byte, error), file *string) (string, error) {
+	if contents, err := f(*file); err == nil {
 		return string(contents), nil
 	} else {
 		return "no file", err
