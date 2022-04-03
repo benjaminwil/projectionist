@@ -14,14 +14,9 @@ func main() {
 
 	flag.Parse()
 
-	projections, err := Read(ioutil.ReadFile, file)
-	if err == nil {
-		fmt.Println(projections)
-		os.Exit(0)
-	} else {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	fmt.Println(read(file))
+
+	os.Exit(0)
 }
 
 func pwd() string {
@@ -32,6 +27,17 @@ func pwd() string {
 	}
 
 	return path
+}
+
+func read(file *string) string {
+	projections, err := Read(ioutil.ReadFile, file)
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	return projections
 }
 
 func Read(f func(string) ([]byte, error), file *string) (string, error) {
