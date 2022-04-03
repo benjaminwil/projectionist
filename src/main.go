@@ -25,13 +25,13 @@ func main() {
 }
 
 func pwd() string {
-	if path, err := os.Getwd(); err != nil {
+	path, err := os.Getwd()
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-		return path
-	} else {
-		return path
 	}
+
+	return path
 }
 
 func ReadProjections(readfile func(string) ([]byte, error),
