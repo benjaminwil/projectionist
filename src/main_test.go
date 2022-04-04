@@ -5,6 +5,53 @@ import (
 	"testing"
 )
 
+func TestHas_NotPresent(t *testing.T) {
+	result := Has(nil, "some-key")
+
+	if result != nil {
+		t.Errorf("Function should return nothing if no projection config.")
+	}
+}
+
+func TestHas_Present_WithoutAlternates(t *testing.T) {
+	projections := map[string]interface{}{
+		"app/jobs/*.rb": map[string]interface{}{
+			"not-alternate": "dont-care-please-stop",
+		},
+	}
+	result := Has(projections, "alternate")
+
+	if len(result) != 0 {
+		t.Errorf("Function should return 1 result but returned %d", len(result))
+	}
+}
+
+func TestHas_Present_WithAlternates(t *testing.T) {
+	projections := map[string]interface{}{
+		"app/models/*.rb": map[string]interface{}{
+			"alternate": "spec/models/{}_spec.rb",
+		},
+		"app/jobs/*.rb": map[string]interface{}{
+			"not-alternate": "dont-care-please-stop",
+		},
+	}
+	result := Has(projections, "alternate")
+
+	if len(result) != 1 {
+		t.Errorf("Function should return 1 result but returned %d", len(result))
+	}
+
+	if result["app/models/*.rb"] == nil {
+		t.Errorf(`Function should return a map that includes the key
+             'app/models/*.rb'.`)
+	}
+
+	if result["app/jobs/*.rb"] != nil {
+		t.Errorf(`Function should only return a map that includes the key
+             'app/models/*.rb'.`)
+	}
+}
+
 func TestRead_NoFilePresent(t *testing.T) {
 	expectedError := fmt.Errorf("no such file")
 	file := pointer("./.projections.json")

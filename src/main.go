@@ -47,6 +47,22 @@ func read(file *string) string {
 	return fmt.Sprintf("%v", form)
 }
 
+func Has(projections map[string]interface{}, subkey string) map[string]interface{} {
+	if projections == nil {
+		return nil
+	}
+
+	results := map[string]interface{}{}
+
+	for key, object := range projections {
+		if object.(map[string]interface{})[subkey] != nil {
+			results[key] = object
+		}
+	}
+
+	return results
+}
+
 func Read(f func(string) ([]byte, error), file *string) map[string]interface{} {
 	contents, err := f(*file)
 
