@@ -31,10 +31,10 @@ func pwd() string {
 }
 
 func read(file *string) string {
-	projections, err := Read(ioutil.ReadFile, file)
+	projections := Read(ioutil.ReadFile, file)
 
-	if err != nil {
-		fmt.Println(err)
+	if projections == nil {
+		fmt.Println("No projections in:", *file)
 		os.Exit(1)
 	}
 
@@ -47,18 +47,17 @@ func read(file *string) string {
 	return fmt.Sprintf("%v", form)
 }
 
-func Read(f func(string) ([]byte, error), file *string) (map[string]interface{}, error) {
-	if contents, err := f(*file); err == nil {
+func Read(f func(string) ([]byte, error), file *string) map[string]interface{} {
+	contents, err := f(*file)
 
-		var data map[string]interface{}
-		e := json.Unmarshal(contents, &data)
-
-		if e == nil {
-			return data, nil
-		} else {
-			return nil, e
-		}
-	} else {
-		return nil, err
+	if err != nil {
+		return nil
 	}
+
+	var data map[string]interface{}
+	if e := json.Unmarshal(contents, &data); e != nil {
+		return nil
+	}
+
+	return data
 }

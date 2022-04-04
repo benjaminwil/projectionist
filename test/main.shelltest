@@ -16,7 +16,7 @@
 
 # The main program is built and cannot find a .projections.json file.
 $ test/build/projectionist
-> /no such file or directory$/
+> /^No projections in:/
 >=1
 
 # A .projections.json file is found and printed.
