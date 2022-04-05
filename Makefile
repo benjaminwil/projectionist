@@ -19,7 +19,7 @@ test-build:
 
 test-go:
 	@printf "\n--- Run Go unit tests. ---\n"
-	go test ./...
+	go test internal/projections/...
 
 test-shelltest:
 	@printf "\n--- Run end-to-end commandline tests. ---\n"

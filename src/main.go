@@ -1,9 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
+	"internal/projections"
 	"io/ioutil"
 	"os"
 )
@@ -31,7 +31,7 @@ func pwd() string {
 }
 
 func read(file *string) string {
-	projections := Read(ioutil.ReadFile, file)
+	projections := projections.Read(ioutil.ReadFile, file)
 
 	if projections == nil {
 		fmt.Println("No projections in:", *file)
@@ -45,35 +45,4 @@ func read(file *string) string {
 	}
 
 	return fmt.Sprintf("%v", form)
-}
-
-func Has(projections map[string]interface{}, subkey string) map[string]interface{} {
-	if projections == nil {
-		return nil
-	}
-
-	results := map[string]interface{}{}
-
-	for key, object := range projections {
-		if object.(map[string]interface{})[subkey] != nil {
-			results[key] = object
-		}
-	}
-
-	return results
-}
-
-func Read(f func(string) ([]byte, error), file *string) map[string]interface{} {
-	contents, err := f(*file)
-
-	if err != nil {
-		return nil
-	}
-
-	var data map[string]interface{}
-	if e := json.Unmarshal(contents, &data); e != nil {
-		return nil
-	}
-
-	return data
 }
