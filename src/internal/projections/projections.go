@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 )
 
-func Has(projections map[string]interface{}, subkey string) map[string]interface{} {
+func Find(projections map[string]interface{}, subkey string) map[string]interface{} {
 	if projections == nil {
 		return nil
 	}

@@ -5,28 +5,28 @@ import (
 	"testing"
 )
 
-func TestHas_NotPresent(t *testing.T) {
-	result := Has(nil, "some-key")
+func TestFind_NotPresent(t *testing.T) {
+	result := Find(nil, "some-key")
 
 	if result != nil {
 		t.Errorf("Function should return nothing if no projection config.")
 	}
 }
 
-func TestHas_Present_WithoutAlternates(t *testing.T) {
+func TestFind_PresentSubkeys_WithoutAlternatesSubkey(t *testing.T) {
 	projections := map[string]interface{}{
 		"app/jobs/*.rb": map[string]interface{}{
 			"not-alternate": "dont-care-please-stop",
 		},
 	}
-	result := Has(projections, "alternate")
+	result := Find(projections, "alternate")
 
 	if len(result) != 0 {
 		t.Errorf("Function should return 1 result but returned %d", len(result))
 	}
 }
 
-func TestHas_Present_WithAlternates(t *testing.T) {
+func TestFind_PresentSubkeys_WithAlternatesSubkey(t *testing.T) {
 	projections := map[string]interface{}{
 		"app/models/*.rb": map[string]interface{}{
 			"alternate": "spec/models/{}_spec.rb",
@@ -35,7 +35,7 @@ func TestHas_Present_WithAlternates(t *testing.T) {
 			"not-alternate": "dont-care-please-stop",
 		},
 	}
-	result := Has(projections, "alternate")
+	result := Find(projections, "alternate")
 
 	if len(result) != 1 {
 		t.Errorf("Function should return 1 result but returned %d", len(result))
