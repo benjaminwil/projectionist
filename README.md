@@ -20,6 +20,19 @@ or [`projectionist`][2] if you're not a Vim user.
 [gh-workflow-badge]: https://github.com/benjaminwil/projectionist/actions/workflows/ci.yml/badge.svg
 [gh-workflow-history]: https://github.com/benjaminwil/projectionist/actions/workflows/ci.yml
 
+## Usage
+
+I expect the commandline interface to be used like this:
+
+    projectionist <command> [--config <projections.json>] <current-file>
+
+Where `--config` can be inferred based on the `$PWD`.
+
+Here's a more concrete example:
+
+    $ projectionist alternate app/models/book.rb
+    # returns: test/models/book_test.rb
+
 ## Dependencies
 
 Once this software has any working functionality I will provide a binary.
