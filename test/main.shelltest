@@ -20,6 +20,6 @@ $ test/build/projectionist
 >=1
 
 # A .projections.json file is found and printed.
-$ test/build/projectionist --file=test/projections.test.json
+$ test/build/projectionist --config=test/projections.test.json
 > /map\[test-key:test-value\]/
 >=0

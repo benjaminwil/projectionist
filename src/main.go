@@ -9,13 +9,12 @@ import (
 )
 
 func main() {
-	file := flag.String("file",
+	config := flag.String("config",
 		fmt.Sprintf("%s/.projections.json", pwd()),
 		"pass an explicit path to the preferred projections JSON")
-
 	flag.Parse()
 
-	fmt.Println(read(file))
+	fmt.Println(read(config))
 
 	os.Exit(0)
 }
@@ -30,11 +29,11 @@ func pwd() string {
 	return path
 }
 
-func read(file *string) string {
-	projections := projections.Read(ioutil.ReadFile, file)
+func read(config *string) string {
+	projections := projections.Read(ioutil.ReadFile, config)
 
 	if projections == nil {
-		fmt.Println("No projections in:", *file)
+		fmt.Println("No projections in:", *config)
 		os.Exit(1)
 	}
 
