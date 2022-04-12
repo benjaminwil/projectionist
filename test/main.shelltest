@@ -14,12 +14,17 @@
 #
 #     $ shelltest test/main.shelltest
 
-# The main program is built and cannot find a .projections.json file.
+# When no subcommand is given, an error message describes valid subcommands.
 $ test/build/projectionist
+> /^Valid subcommands: alternate/
+>=1
+
+# The main program is built and cannot find a .projections.json file.
+$ test/build/projectionist alternate
 > /^No projections in:/
 >=1
 
 # A .projections.json file is found and printed.
-$ test/build/projectionist --config=test/projections.test.json
+$ test/build/projectionist alternate --config=test/projections.test.json
 > /map\[test-key:test-value\]/
 >=0

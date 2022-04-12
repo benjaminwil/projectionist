@@ -6,17 +6,53 @@ import (
 	"internal/projections"
 	"io/ioutil"
 	"os"
+	"strings"
+)
+
+var (
+	alternateCommand = flag.NewFlagSet("alternate", flag.ExitOnError)
+	config           *string
+	subcommands      = map[string]*flag.FlagSet{
+		alternateCommand.Name(): alternateCommand,
+	}
 )
 
 func main() {
-	config := flag.String("config",
-		fmt.Sprintf("%s/.projections.json", pwd()),
-		"pass an explicit path to the preferred projections JSON")
-	flag.Parse()
+	configureFlags()
+	exitIfInvalidArguments()
+
+	command := subcommands[os.Args[1]]
+	command.Parse(os.Args[2:])
 
 	fmt.Println(read(config))
-
 	os.Exit(0)
+}
+
+func exitIfInvalidArguments() {
+	if (len(os.Args) < 2) || subcommands[os.Args[1]] == nil {
+		fmt.Println("Valid subcommands:", subcommandList())
+		os.Exit(1)
+	}
+}
+
+func subcommandList() string {
+	list := make([]string, 0, len(subcommands))
+
+	for name := range subcommands {
+		list = append(list, name)
+	}
+
+	return strings.Join(list, ", ")
+}
+
+func configureFlags() {
+	for _, flagSet := range subcommands {
+		config = flagSet.String(
+			"config",
+			fmt.Sprintf("%s/.projections.json", pwd()),
+			"Provide a JSON file to read projections from.",
+		)
+	}
 }
 
 func pwd() string {
