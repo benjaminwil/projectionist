@@ -5,6 +5,50 @@ import (
 	"testing"
 )
 
+func TestAlternateOf_ProjectionsNotPresent(t *testing.T) {
+	_, err := AlternateOf(nil, "path/to/file.txt")
+
+	if err == nil {
+		t.Errorf("Function should return an error if no projections given.")
+	}
+}
+
+func TestAlternateOf_AlternateFound(t *testing.T) {
+	projections := map[string]interface{}{
+		"app/jobs/*.rb": map[string]interface{}{
+			"alternate": "spec/jobs/{}_spec.rb",
+		},
+	}
+
+	result, err := AlternateOf(projections, "app/jobs/my_file.rb")
+
+	if result != "spec/jobs/my_file_spec.rb" {
+		t.Errorf("Function should return 'spec/jobs/my_file_spec.rb' but returned %s", result)
+	}
+
+	if err != nil {
+		t.Errorf("Function should not return an error but returned '%v'.", err)
+	}
+}
+
+func TestAlternateOf_NoAlternateFound(t *testing.T) {
+	projections := map[string]interface{}{
+		"app/jobs/*.rb": map[string]interface{}{
+			"alternate": "spec/jobs/{}_spec.rb",
+		},
+	}
+
+	result, err := AlternateOf(projections, "app/models/my_file.rb")
+
+	if result != "" {
+		t.Errorf("Function should return an empty string but returns %s", result)
+	}
+
+	if err != nil {
+		t.Errorf("Function should not return an error but returned '%v'.", err)
+	}
+}
+
 func TestFind_NotPresent(t *testing.T) {
 	result := Find(nil, "some-key")
 
@@ -41,14 +85,8 @@ func TestFind_PresentSubkeys_WithAlternatesSubkey(t *testing.T) {
 		t.Errorf("Function should return 1 result but returned %d", len(result))
 	}
 
-	if result["app/models/*.rb"] == nil {
-		t.Errorf(`Function should return a map that includes the key
-             'app/models/*.rb'.`)
-	}
-
-	if result["app/jobs/*.rb"] != nil {
-		t.Errorf(`Function should only return a map that includes the key
-             'app/models/*.rb'.`)
+	if !testEq(result, []string{"spec/models/{}_spec.rb"}) {
+		t.Errorf("Function should return result 'spec/models/{}_spec.rb' but returned %v", result)
 	}
 }
 
@@ -86,4 +124,18 @@ func pointer(s string) *string {
 	var p *string
 	p = &s
 	return p
+}
+
+func testEq(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+
+	return true
 }
