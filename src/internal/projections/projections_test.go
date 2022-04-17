@@ -44,8 +44,8 @@ func TestAlternateOf_NoAlternateFound(t *testing.T) {
 		t.Errorf("Function should return an empty string but returns %s", result)
 	}
 
-	if err != nil {
-		t.Errorf("Function should not return an error but returned '%v'.", err)
+	if err == nil {
+		t.Errorf("Function should return an error but did not.")
 	}
 }
 

@@ -18,6 +18,10 @@ func AlternateOf(projections map[string]interface{},
 	relevantProjections := filterProjections(projections, candidates)
 	results := replaceTemplate(relevantProjections, candidates, file, "alternate")
 
+	if len(results) == 0 {
+		return "", errors.New(fmt.Sprintf("No alternate found for '%s'.", file))
+	}
+
 	return strings.Join(results, " "), nil
 }
 
