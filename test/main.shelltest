@@ -24,7 +24,24 @@ $ test/build/projectionist alternate
 > /^No projections in:/
 >=1
 
-# A .projections.json file is found and printed.
-$ test/build/projectionist alternate --config=test/projections.test.json
-> /map\[test-key:test-value\]/
+# A .projections.json file is available, but no files were given.
+$ test/build/projectionist alternate --config test/projections.test.json
+> /^No files given./
+>=1
+
+# A .projections.json file is found and a file alternate is calculated.
+$ test/build/projectionist alternate --config test/projections.test.json my_file.rb
+> /^my_file_alternate.rb/
 >=0
+
+# A .projections.json file is found and a file alternate is calculated with
+#   the file argument before the config flag.
+$ test/build/projectionist alternate my_file.rb --config test/projections.test.json
+> /^my_file_alternate.rb/
+>=0
+
+# A .projections.json file is found, but the given file doesn't have alternate
+#   configuration.
+$ test/build/projectionist alternate my_file.txt --config test/projections.test.json
+> /^No alternate found for 'my_file.txt'/
+>=1

@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"internal/niceargs"
 	"internal/projections"
 	"io/ioutil"
 	"os"
@@ -21,17 +22,46 @@ func main() {
 	configureFlags()
 	exitIfInvalidArguments()
 
-	command := subcommands[os.Args[1]]
-	command.Parse(os.Args[2:])
+	arguments := niceargs.List(os.Args[2:])
 
-	fmt.Println(read(config))
-	os.Exit(0)
+	command := subcommands[os.Args[1]]
+	command.Parse(arguments)
+	data := readProjections()
+
+	exitIfNoFilesGiven(command)
+
+	printAlternates(data, command)
+
+	fmt.Println(`Something went wrong.
+              If you received this, you may want to submit a bug report.`)
+	os.Exit(1)
 }
 
 func exitIfInvalidArguments() {
 	if (len(os.Args) < 2) || subcommands[os.Args[1]] == nil {
 		fmt.Println("Valid subcommands:", subcommandList())
 		os.Exit(1)
+	}
+}
+
+func exitIfNoFilesGiven(command *flag.FlagSet) {
+	if command.NArg() == 0 {
+		fmt.Println("No files given.")
+		os.Exit(1)
+	}
+}
+
+func printAlternates(data map[string]interface{}, command *flag.FlagSet) {
+	if os.Args[1] == "alternate" {
+		results, err := projections.AlternateOf(data, command.Args()[0])
+
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		fmt.Println(results)
+		os.Exit(0)
 	}
 }
 
@@ -65,7 +95,7 @@ func pwd() string {
 	return path
 }
 
-func read(config *string) string {
+func readProjections() map[string]interface{} {
 	projections := projections.Read(ioutil.ReadFile, config)
 
 	if projections == nil {
@@ -73,11 +103,5 @@ func read(config *string) string {
 		os.Exit(1)
 	}
 
-	form := make(map[string]string)
-
-	for key, value := range projections {
-		form[key] = value.(string)
-	}
-
-	return fmt.Sprintf("%v", form)
+	return projections
 }
