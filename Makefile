@@ -19,6 +19,7 @@ test-build:
 
 test-go:
 	@printf "\n--- Run Go unit tests. ---\n"
+	go test internal/niceargs/...
 	go test internal/projections/...
 
 test-shelltest:
